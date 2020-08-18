@@ -29,7 +29,7 @@ local UIParent = UIParent
 ------------------------------------------------------------------------------
 -- Tables and locals
 ------------------------------------------------------------------------------
-lib.frameMetatable = lib.frameMetatable or { __index = CreateFrame("Frame") }
+lib.frameMetatable = lib.frameMetatable or { __index = CreateFrame("Frame", nil, nil, BackdropTemplateMixin and "BackdropTemplate") }
 
 lib.tipPrototype = lib.tipPrototype or setmetatable({}, lib.frameMetatable)
 lib.tipMetatable = lib.tipMetatable or { __index = lib.tipPrototype }
@@ -156,7 +156,7 @@ end
 local frameHeap = lib.frameHeap
 
 local function AcquireFrame(parent)
-	local frame = tremove(frameHeap) or CreateFrame("Frame")
+	local frame = tremove(frameHeap) or CreateFrame("Frame", nil, nil, BackdropTemplateMixin and "BackdropTemplate")
 	frame:SetParent(parent)
 	--[===[@debug@
 	usedFrames = usedFrames + 1
@@ -179,7 +179,7 @@ end
 ------------------------------------------------------------------------------
 -- Dirty layout handler
 ------------------------------------------------------------------------------
-lib.layoutCleaner = lib.layoutCleaner or CreateFrame('Frame')
+lib.layoutCleaner = lib.layoutCleaner or CreateFrame('Frame', nil, nil, BackdropTemplateMixin and "BackdropTemplate")
 
 local layoutCleaner = lib.layoutCleaner
 layoutCleaner.registry = layoutCleaner.registry or {}
