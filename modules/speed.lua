@@ -27,7 +27,7 @@ function SpeedModule:OnEnable()
   if true and self.tooltip == nil then
     self.tooltip = GameTooltip
   end
-  ticker = C_Timer.NewTicker(1,function() self:Coordinates_Update_value() end)
+  ticker = C_Timer.NewTicker(1,function() self:Speed_Update_value() end)
 end
 
 function SpeedModule:OnDisable()
