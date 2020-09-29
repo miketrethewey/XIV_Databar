@@ -3,6 +3,7 @@ local _G = _G;
 local L = xb.L;
 
 local SpeedModule = xb:NewModule("SpeedModule", 'AceEvent-3.0')
+local ticker = nil
 
 function SpeedModule:GetName()
   return "speed";
@@ -12,6 +13,7 @@ function SpeedModule:OnInitialize()
   self.frame = nil
   self.icon = nil
   self.text = nil
+  self.tooltip = nil
 end
 
 function SpeedModule:OnEnable()
@@ -22,6 +24,10 @@ function SpeedModule:OnEnable()
     self.frame:Show()
     self:RegisterEvents()
   end
+  if true and self.tooltip == nil then
+    self.tooltip = GameTooltip
+  end
+  ticker = C_Timer.NewTicker(1,function() self:Coordinates_Update_value() end)
 end
 
 function SpeedModule:OnDisable()
@@ -29,6 +35,7 @@ function SpeedModule:OnDisable()
     self.frame:Hide()
     self.frame:UnregisterAllEvents()
   end
+  ticker:Cancel()
 end
 
 function SpeedModule:CreateModuleFrame()
@@ -60,7 +67,7 @@ function SpeedModule:CreateModuleFrame()
   self.text:SetFont(xb:GetFont(xb.db.profile.text.fontSize))
   self.text:SetPoint("RIGHT", self.frame,2,0)
   self.text:SetTextColor(xb:GetColor('inactive'))
-  self.text:SetText("Coordinates")
+  self.text:SetText("Speed")
 end
 
 function SpeedModule:GetSpeed()
@@ -73,6 +80,9 @@ function SpeedModule:RegisterEvents()
     if InCombatLockdown() then return end
     self.icon:SetVertexColor(xb:GetColor('hover'))
     self.text:SetTextColor(xb:GetColor('hover'))
+    if true then
+      self.tooltip:Show()
+    end
 
     local speed = self:GetSpeed()
 
@@ -93,17 +103,9 @@ function SpeedModule:RegisterEvents()
   self.frame:SetScript("OnLeave", function()
     self.icon:SetVertexColor(xb:GetColor('normal'))
     self.text:SetTextColor(xb:GetColor('inactive'))
-    GameTooltip:Hide();
-  end)
-
-	self.frame:RegisterEvent("PLAYER_ENTERING_WORLD");
-  self.frame:RegisterEvent("ZONE_CHANGED");
-  self.frame:RegisterEvent("ZONE_CHANGED_INDOORS");
-  self.frame:RegisterEvent("ZONE_CHANGED_NEW_AREA");
-  self.frame:RegisterEvent("PLAYER_ENTERING_WORLD");
-  self.frame:RegisterEvent("CVAR_UPDATE");
-  self.frame:SetScript("OnEvent", function(self,event, ...)
-    SpeedModule:Speed_Update_value()
+    if true then
+      self.tooltip:Hide()
+    end
   end)
 end
 
@@ -132,12 +134,25 @@ function SpeedModule:Refresh()
     self.frame:Show()
   end
 end
+
 function SpeedModule:Speed_Update_value()
 	if self.text and self.frame then
     local speed = self:GetSpeed()
     self.text:SetText(speed)
 		self.frame:SetSize(self.text:GetStringWidth()+18, 16)
 	end
+
+  if true then
+    if xb.db.profile.general.barPosition == "TOP" then
+      self.tooltip:SetOwner(self.frame, "ANCHOR_BOTTOM")
+    else
+      self.tooltip:SetOwner(self.frame, "ANCHOR_TOP")
+    end
+    self.tooltip:AddLine("[|cff6699FFSpeed|r]")
+    self.tooltip:AddLine(" ")
+    self.tooltip:AddDoubleLine("<"..'Speed'..">", "|cffffffff"..speed.."|r")
+    self.tooltip:Show()
+  end
 end
 
 function SpeedModule:GetDefaultOptions()
