@@ -13,19 +13,14 @@ function SpeedModule:OnInitialize()
   self.frame = nil
   self.icon = nil
   self.text = nil
-  self.tooltip = nil
 end
 
 function SpeedModule:OnEnable()
   if self.frame == nil then
     self:CreateModuleFrame()
-    self:RegisterEvents()
   else
+    self:UpdateModuleFrame()
     self.frame:Show()
-    self:RegisterEvents()
-  end
-  if true and self.tooltip == nil then
-    self.tooltip = GameTooltip
   end
   ticker = C_Timer.NewTicker(1,function() self:Speed_Update_value() end)
 end
@@ -33,9 +28,43 @@ end
 function SpeedModule:OnDisable()
   if self.frame then
     self.frame:Hide()
-    self.frame:UnregisterAllEvents()
+    self.frame = nil
   end
   ticker:Cancel()
+end
+
+function SpeedModule:UpdateModuleFrame()
+  local relativeAnchorPoint = 'RIGHT'
+  local xOffset = xb.db.profile.general.moduleSpacing
+
+  local moduleInfo = {
+    { "currency", "currencyFrame" },
+    { "clock", "clockFrame" },
+    { "bar", "bar" }
+  }
+  local count = 0
+  for _ in pairs(moduleInfo) do count = count + 1 end
+
+  local moduleKey = ""
+  local lastModuleKey = ""
+  local frameName = ""
+  local parentFrame = nil
+
+  for i=1,count do
+    moduleKey = moduleInfo[i][1]
+    frameName = moduleInfo[i][2]
+    parentFrame = xb:GetFrame(frameName)
+    if (xb.db.profile.modules[lastModuleKey] and xb.db.profile.modules[lastModuleKey].enabled) or parentFrame ~= nil then
+      break
+    end
+    lastModuleKey = moduleKey
+  end
+  if moduleKey == "bar" then
+    relativeAnchorPoint = 'LEFT'
+    xOffset = 0
+  end
+
+  self.frame:SetPoint('LEFT', parentFrame, relativeAnchorPoint, xOffset, 0)
 end
 
 function SpeedModule:CreateModuleFrame()
@@ -43,19 +72,7 @@ function SpeedModule:CreateModuleFrame()
   xb:RegisterFrame('speedFrame',self.frame)
   self.frame:EnableMouse(true)
 
-  local relativeAnchorPoint = 'RIGHT'
-  local xOffset = xb.db.profile.general.moduleSpacing
-  local parentFrame = xb:GetFrame('currencyFrame')
-  if not xb.db.profile.modules.currency.enabled then
-    parentFrame=xb:GetFrame('clockFrame')
-    if not xb.db.profile.modules.clock.enabled then
-      parentFrame=xb:GetFrame('bar')
-      relativeAnchorPoint = 'LEFT'
-      xOffset = 0
-    end
-  end
-
-  self.frame:SetPoint('LEFT', parentFrame, relativeAnchorPoint, xOffset, 0)
+  self:UpdateModuleFrame()
 
   self.icon = self.frame:CreateTexture(nil,"OVERLAY",nil,7)
   self.icon:SetPoint("LEFT")
@@ -75,40 +92,6 @@ function SpeedModule:GetSpeed()
   return string.format("%d%%", currentSpeed / BASE_MOVEMENT_SPEED * 100)
 end
 
-function SpeedModule:RegisterEvents()
-  self.frame:SetScript("OnEnter", function()
-    if InCombatLockdown() then return end
-    self.icon:SetVertexColor(xb:GetColor('hover'))
-    self.text:SetTextColor(xb:GetColor('hover'))
-    if true then
-      self.tooltip:Show()
-    end
-
-    local speed = self:GetSpeed()
-
-    if xb.db.profile.general.barPosition == "TOP" then
-      GameTooltip:SetOwner(self.frame, "ANCHOR_BOTTOM")
-    else
-      GameTooltip:SetOwner(self.frame, "ANCHOR_TOP")
-    end
-    GameTooltip:AddLine("[|cff6699FFSpeed|r]")
-    GameTooltip:AddLine(" ")
-    GameTooltip:AddDoubleLine("<"..'Speed'..">", "|cffffffff"..speed.."|r")
-    GameTooltip:Show()
-  end)
-
-  self.frame:SetScript("OnClick", function(self, button, down)
-  end)
-
-  self.frame:SetScript("OnLeave", function()
-    self.icon:SetVertexColor(xb:GetColor('normal'))
-    self.text:SetTextColor(xb:GetColor('inactive'))
-    if true then
-      self.tooltip:Hide()
-    end
-  end)
-end
-
 function SpeedModule:Refresh()
   if not xb.db.profile.modules.speed.enabled then self:Disable(); return; end
 
@@ -119,18 +102,7 @@ function SpeedModule:Refresh()
 
   if self.frame then
     self.frame:Hide()
-    local relativeAnchorPoint = 'RIGHT'
-    local xOffset = xb.db.profile.general.moduleSpacing
-    local parentFrame = xb:GetFrame('currencyFrame')
-    if not xb.db.profile.modules.currency.enabled then
-      parentFrame=xb:GetFrame('clockFrame')
-      if not xb.db.profile.modules.clock.enabled then
-        parentFrame=xb:GetFrame('bar')
-        relativeAnchorPoint = 'LEFT'
-        xOffset = 0
-      end
-    end
-    self.frame:SetPoint('LEFT', parentFrame, relativeAnchorPoint, xOffset, 0)
+    self:UpdateModuleFrame()
     self.frame:Show()
   end
 end
@@ -141,18 +113,6 @@ function SpeedModule:Speed_Update_value()
     self.text:SetText(speed)
 		self.frame:SetSize(self.text:GetStringWidth()+18, 16)
 	end
-
-  if true then
-    if xb.db.profile.general.barPosition == "TOP" then
-      self.tooltip:SetOwner(self.frame, "ANCHOR_BOTTOM")
-    else
-      self.tooltip:SetOwner(self.frame, "ANCHOR_TOP")
-    end
-    self.tooltip:AddLine("[|cff6699FFSpeed|r]")
-    self.tooltip:AddLine(" ")
-    self.tooltip:AddDoubleLine("<"..'Speed'..">", "|cffffffff"..speed.."|r")
-    self.tooltip:Show()
-  end
 end
 
 function SpeedModule:GetDefaultOptions()
