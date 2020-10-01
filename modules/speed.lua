@@ -38,8 +38,9 @@ function SpeedModule:UpdateModuleFrame()
   local xOffset = xb.db.profile.general.moduleSpacing
 
   local moduleInfo = {
-    { "tradeskill", "tradeskillFrame" },
+    -- { "speed", "speedFrame" },
     { "currency", "currencyFrame" },
+    { "tradeskill", "tradeskillFrame" },
     { "clock", "clockFrame" },
     { "bar", "bar" }
   }
