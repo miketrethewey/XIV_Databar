@@ -80,10 +80,14 @@ L['Show PVP Button'] = true;
 L['Show Pets Button'] = true;
 L['Show Shop Button'] = true;
 L['Show Help Button'] = true;
+L['No Info'] = true;
+L['Classic'] = true;
+L['Alliance'] = true;
+L['Horde'] = true;
 
-L['Always Show Item Level'] = true;
-L['Minimum Durability to Become Active'] = true;
-L['Maximum Durability to Show Item Level'] = true;
+L['Durability Warning Threshold'] = true;
+L['Show Item Level'] = true;
+L['Show Coordinates'] = true;
 
 L['Master Volume'] = true;
 L["Volume step"] = true;

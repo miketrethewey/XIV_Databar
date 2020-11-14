@@ -58,7 +58,7 @@ end
 
 function TravelModule:OnEnable()
   if self.hearthFrame == nil then
-    self.hearthFrame = CreateFrame("FRAME", nil, xb:GetFrame('bar'))
+    self.hearthFrame = CreateFrame('FRAME', nil, xb:GetFrame('bar'))
     xb:RegisterFrame('travelFrame', self.hearthFrame)
   end
   self.useElvUI = xb.db.profile.general.useElvUI and (IsAddOnLoaded('ElvUI') or IsAddOnLoaded('Tukui'))
@@ -76,15 +76,15 @@ function TravelModule:OnDisable()
 end
 
 function TravelModule:CreateFrames()
-  self.hearthButton = self.hearthButton or CreateFrame('BUTTON', "hearthButton", self.hearthFrame, "SecureActionButtonTemplate")
+  self.hearthButton = self.hearthButton or CreateFrame('BUTTON', 'hearthButton', self.hearthFrame, 'SecureActionButtonTemplate')
   self.hearthIcon = self.hearthIcon or self.hearthButton:CreateTexture(nil, 'OVERLAY')
   self.hearthText = self.hearthText or self.hearthButton:CreateFontString(nil, 'OVERLAY')
 
-  self.portButton = self.portButton or CreateFrame('BUTTON', "portButton", self.hearthFrame, "SecureActionButtonTemplate")
+  self.portButton = self.portButton or CreateFrame('BUTTON', 'portButton', self.hearthFrame, 'SecureActionButtonTemplate')
   self.portIcon = self.portIcon or self.portButton:CreateTexture(nil, 'OVERLAY')
   self.portText = self.portText or self.portButton:CreateFontString(nil, 'OVERLAY')
 
-  self.portPopup = self.portPopup or CreateFrame('BUTTON', "portPopup", self.portButton, BackdropTemplateMixin and "BackdropTemplate")
+  self.portPopup = self.portPopup or CreateFrame('BUTTON', 'portPopup', self.portButton, BackdropTemplateMixin and 'BackdropTemplate')
   local backdrop = GameTooltip:GetBackdrop()
   if backdrop and (not self.useElvUI) then
     self.portPopup:SetBackdrop(backdrop)
@@ -98,7 +98,7 @@ function TravelModule:RegisterFrameEvents()
   self:RegisterEvent('BAG_UPDATE_DELAYED', 'Refresh')
   self:RegisterEvent('HEARTHSTONE_BOUND', 'Refresh')
   self.hearthButton:EnableMouse(true)
-  self.hearthButton:RegisterForClicks("AnyUp")
+  self.hearthButton:RegisterForClicks('AnyUp')
   self.hearthButton:SetAttribute('type', 'macro')
 
   self.portButton:EnableMouse(true)
@@ -214,7 +214,7 @@ function TravelModule:SetHearthColor()
   if self.hearthButton:IsMouseOver() then
     self.hearthText:SetTextColor(unpack(xb:HoverColors()))
   else
-    self.hearthIcon:SetVertexColor(db.color.normal.r, db.color.normal.g, db.color.normal.b, db.color.normal.a)
+    self.hearthIcon:SetVertexColor(xb:GetColor('normal'))
     local hearthName = ''
     local hearthActive = true
     for i,v in ipairs(self.hearthstones) do
@@ -240,7 +240,7 @@ function TravelModule:SetHearthColor()
       self.hearthIcon:SetVertexColor(db.color.inactive.r, db.color.inactive.g, db.color.inactive.b, db.color.inactive.a)
       self.hearthText:SetTextColor(db.color.inactive.r, db.color.inactive.g, db.color.inactive.b, db.color.inactive.a)
     else
-      self.hearthText:SetTextColor(db.color.normal.r, db.color.normal.g, db.color.normal.b, db.color.normal.a)
+      self.hearthText:SetTextColor(xb:GetColor('normal'))
     end
   end --else
 end
@@ -288,8 +288,8 @@ function TravelModule:SetPortColor()
       self.portIcon:SetVertexColor(db.color.inactive.r, db.color.inactive.g, db.color.inactive.b, db.color.inactive.a)
       self.portText:SetTextColor(db.color.inactive.r, db.color.inactive.g, db.color.inactive.b, db.color.inactive.a)
     else
-      self.portIcon:SetVertexColor(db.color.normal.r, db.color.normal.g, db.color.normal.b, db.color.normal.a)
-      self.portText:SetTextColor(db.color.normal.r, db.color.normal.g, db.color.normal.b, db.color.normal.a)
+      self.portIcon:SetVertexColor(xb:GetColor('normal'))
+      self.portText:SetTextColor(xb:GetColor('normal'))
     end
   end --else
 end
@@ -316,7 +316,7 @@ function TravelModule:CreatePortPopup()
         local buttonText = button:CreateFontString(nil, 'OVERLAY')
 
         buttonText:SetFont(xb:GetFont(db.text.fontSize))
-        buttonText:SetTextColor(db.color.normal.r, db.color.normal.g, db.color.normal.b, db.color.normal.a)
+        buttonText:SetTextColor(xb:GetColor('normal'))
         buttonText:SetText(v.text)
         buttonText:SetPoint('LEFT')
         local textWidth = buttonText:GetStringWidth()
@@ -330,11 +330,11 @@ function TravelModule:CreatePortPopup()
         button:RegisterForClicks('LeftButtonUp')
 
         button:SetScript('OnEnter', function()
-          buttonText:SetTextColor(db.color.normal.r, db.color.normal.g, db.color.normal.b, db.color.normal.a)
+          buttonText:SetTextColor(xb:GetColor('normal'))
         end)
 
         button:SetScript('OnLeave', function()
-          buttonText:SetTextColor(db.color.normal.r, db.color.normal.g, db.color.normal.b, db.color.normal.a)
+          buttonText:SetTextColor(xb:GetColor('normal'))
         end)
 
         button:SetScript('OnClick', function(self)

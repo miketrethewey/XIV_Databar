@@ -11,19 +11,20 @@ end
 
 function ArmorModule:OnInitialize()
   self.iconPath = xb.constants.mediaPath..'datatexts\\repair'
-  self.durabilityAverage = 0
+  self.durabilityLowest = 0
   self.durabilityList = {
-    [INVSLOT_HEAD] = { cur = 0, max = 0, text = HEADSLOT},
-    [INVSLOT_SHOULDER] =  { cur = 0, max = 0, text = SHOULDERSLOT},
-    [INVSLOT_CHEST] =  { cur = 0, max = 0, text = CHESTSLOT},
-    [INVSLOT_WAIST] =  { cur = 0, max = 0, text = WAISTSLOT},
-    [INVSLOT_LEGS] =  { cur = 0, max = 0, text = LEGSSLOT},
-    [INVSLOT_FEET] =  { cur = 0, max = 0, text = FEETSLOT},
-    [INVSLOT_WRIST] =  { cur = 0, max = 0, text = WRISTSLOT},
-    [INVSLOT_HAND] =  { cur = 0, max = 0, text = HANDSSLOT},
-    [INVSLOT_MAINHAND] =  { cur = 0, max = 0, text = MAINHANDSLOT},
-    [INVSLOT_OFFHAND] =  { cur = 0, max = 0, text = SECONDARYHANDSLOT}
+    [INVSLOT_HEAD] = { cur = 0, max = 0, pc = 0, text = HEADSLOT},
+    [INVSLOT_SHOULDER] =  { cur = 0, max = 0, pc = 0, text = SHOULDERSLOT},
+    [INVSLOT_CHEST] =  { cur = 0, max = 0, pc = 0, text = CHESTSLOT},
+    [INVSLOT_WAIST] =  { cur = 0, max = 0, pc = 0, text = WAISTSLOT},
+    [INVSLOT_LEGS] =  { cur = 0, max = 0, pc = 0, text = LEGSSLOT},
+    [INVSLOT_FEET] =  { cur = 0, max = 0, pc = 0, text = FEETSLOT},
+    [INVSLOT_WRIST] =  { cur = 0, max = 0, pc = 0, text = WRISTSLOT},
+    [INVSLOT_HAND] =  { cur = 0, max = 0, pc = 0, text = HANDSSLOT},
+    [INVSLOT_MAINHAND] =  { cur = 0, max = 0, pc = 0, text = MAINHANDSLOT},
+    [INVSLOT_OFFHAND] =  { cur = 0, max = 0, pc = 0, text = SECONDARYHANDSLOT}
   }
+  self.MapRects = { }
 end
 
 function ArmorModule:OnEnable()
@@ -34,6 +35,7 @@ function ArmorModule:OnEnable()
   self.armorFrame:Show()
   self:CreateFrames()
   self:RegisterFrameEvents()
+  self:RegisterCoordTicker()
   xb:Refresh()
 end
 
@@ -46,6 +48,7 @@ function ArmorModule:CreateFrames()
   self.armorButton = self.armorButton or CreateFrame('BUTTON', nil, self.armorFrame)
   self.armorIcon = self.armorIcon or self.armorButton:CreateTexture(nil, 'OVERLAY')
   self.armorText = self.armorText or self.armorButton:CreateFontString(nil, 'OVERLAY')
+  self.coordText = self.coordText or self.armorButton:CreateFontString(nil, 'OVERLAY')
 end
 
 function ArmorModule:RegisterFrameEvents()
@@ -59,12 +62,11 @@ function ArmorModule:RegisterFrameEvents()
     local r, g, b, _ = unpack(xb:HoverColors())
 		GameTooltip:AddLine("|cFFFFFFFF[|r"..AUCTION_CATEGORY_ARMOR.."|cFFFFFFFF]|r", r, g, b)
 		GameTooltip:AddLine(" ")
-		for i,v in pairs(ArmorModule.durabilityList) do
-		  if v.max ~= nil and v.max > 0 then
-      local perc = floor((v.cur / v.max)  * 100)
-      local u20G, u20B = 1, 1
-      if perc <= 20 then u20G, u20B = 0, 0 end
-			GameTooltip:AddDoubleLine(v.text, string.format('%d/%d (%d%%)', v.cur, v.max, perc), r, g, b, 1, u20G, u20B)
+    for i,v in pairs(ArmorModule.durabilityList) do
+      if v.max and v.max > 0 then
+        local u20G, u20B = 1, 1
+        if v.pc <= 20 then u20G, u20B = 0, 0 end
+        GameTooltip:AddDoubleLine(v.text, string.format('%d/%d (%d%%)', v.cur, v.max, v.pc), r, g, b, 1, u20G, u20B)
 		  end
 		end
 		GameTooltip:Show()
@@ -99,14 +101,27 @@ function ArmorModule:RegisterFrameEvents()
   self:RegisterEvent('UPDATE_INVENTORY_DURABILITY')
 end
 
+function ArmorModule:RegisterCoordTicker()
+  if xb.db.profile.modules.armor.showCoords then
+    self.coordTicker = C_Timer.NewTicker(0.2, function()
+      if InCombatLockdown() then return end
+      self:UpdatePlayerCoordinates()
+    end)
+  end
+end
+
 function ArmorModule:SetArmorColor()
   local db = xb.db.profile
   if self.armorButton:IsMouseOver() then
     self.armorText:SetTextColor(unpack(xb:HoverColors()))
+    self.coordText:SetTextColor(unpack(xb:HoverColors()))
   else
-    self.armorText:SetTextColor(db.color.normal.r, db.color.normal.g, db.color.normal.b, db.color.normal.a)
-    if self.durabilityAverage >= db.modules.armor.durabilityMin then
-      self.armorIcon:SetVertexColor(db.color.normal.r, db.color.normal.g, db.color.normal.b, db.color.normal.a)
+    self.armorText:SetTextColor(xb:GetColor('normal'))
+    self.coordText:SetTextColor(xb:GetColor('normal'))
+    -- check if the lowest durability armor piece is higher than the warning threshold
+    if self.durabilityLowest > db.modules.armor.warningDurability then
+      self.armorIcon:SetVertexColor(xb:GetColor('normal'))
+    -- lowest durability armor piece is lower than the warning threshold, re-color armor icon red
     else
       self.armorIcon:SetVertexColor(1, 0, 0, 1)
     end
@@ -115,7 +130,8 @@ end
 
 function ArmorModule:Refresh()
   if self.armorFrame == nil then return; end
-  if not true then self:Disable(); return; end --xb.db.profile.modules.armor.enabled
+  local db = xb.db.profile.modules.armor
+  if not db.enabled then self:Disable(); return; end
 
   if InCombatLockdown() then
     self:UpdateDurabilityText()
@@ -131,7 +147,18 @@ function ArmorModule:Refresh()
   self:UpdateDurabilityText()
   self.armorText:SetPoint('LEFT', self.armorIcon, 'RIGHT', 5, 0)
 
-  self.armorFrame:SetSize(5 + iconSize + self.armorText:GetStringWidth(), xb:GetHeight())
+  self.coordText:SetFont(xb:GetFont(xb.db.profile.text.fontSize))
+  self.coordText:SetPoint('LEFT', self.armorText, 'RIGHT', 5, 0)
+
+  if self.coordTicker then
+    if self.coordTicker:IsCancelled() and db.showCoords then
+      self:RegisterCoordTicker()
+    end
+  elseif db.showCoords then
+    self:RegisterCoordTicker()
+  end
+
+  self.armorFrame:SetSize(5 + iconSize + self.armorText:GetStringWidth() + self.coordText:GetStringWidth(), xb:GetHeight())
 
   self.armorButton:SetAllPoints()
 
@@ -155,42 +182,73 @@ function ArmorModule:UPDATE_INVENTORY_DURABILITY()
 end
 
 function ArmorModule:UpdateDurabilityText()
-  local total = 0
-  local maxTotal = 0
   local db =  xb.db.profile.modules.armor
   local text = ''
+  local lowest = 101 -- store the most broken armor piece's percentage
 
   for i,v in pairs(self.durabilityList) do
     local curDur, maxDur = GetInventoryItemDurability(i)
-    if curDur ~= nil and maxDur ~= nil then
-      total = total + curDur
-      maxTotal = maxTotal + maxDur
+    if curDur and maxDur then
       v.cur = curDur
       v.max = maxDur
+      v.pc = math.floor((curDur / maxDur) * 100)
+      if v.pc < lowest then lowest = v.pc end
     end
   end
-  self.durabilityAverage = floor((total / maxTotal) * 100)
 
-  if self.durabilityAverage <= db.durabilityMin then
-    text = '|cFFFF0000'..text..self.durabilityAverage..'%|r'
+  self.durabilityLowest = lowest
+
+  -- this is the check for the warning threshold 
+  if self.durabilityLowest <= db.warningDurability then
+    text = '|cFFFF0000' .. text .. self.durabilityLowest .. '%|r'
   else
-    text = text..self.durabilityAverage..'%'
+    text = text .. self.durabilityLowest .. '%'
   end
 
-  if (self.durabilityAverage > db.durabilityMax) or db.alwaysShowIlvl then
+  -- add the equipped ilvl of the player in format "12.3"
+  if db.showIlvl then
     local _, equippedIlvl = GetAverageItemLevel()
-    text = text..' '..floor(equippedIlvl)..' ilvl'
+    text = text .. ' ' .. math.floor(equippedIlvl) .. ' ilvl'
   end
 
   self.armorText:SetText(text)
 end
 
+function ArmorModule:UpdatePlayerCoordinates()
+  if not xb.db.profile.modules.armor.showCoords then
+    self.coordTicker:Cancel()
+    self.coordText:Hide()
+    return
+  end
+  
+  self.coordText:Show()
+  local map_id = C_Map.GetBestMapForUnit('player')
+  if not map_id then return end
+
+  local rects = self.MapRects[map_id]
+  if not rects then
+    rects = { }
+    local _, topleft = C_Map.GetWorldPosFromMapPos(map_id, CreateVector2D(0, 0))
+    local _, bottomright = C_Map.GetWorldPosFromMapPos(map_id, CreateVector2D(1, 1))
+    bottomright:Subtract(topleft)
+    rects = { topleft.x, topleft.y, bottomright.x, bottomright.y }
+    self.MapRects[map_id] = rects
+  end
+
+  local x, y = UnitPosition('player')
+  if not x then return end
+  x = floor(((x - rects[1]) / rects[3]) * 10000) / 100
+  y = floor(((y - rects[2]) / rects[4]) * 10000) / 100
+
+  self.coordText:SetText(y .. ', ' .. x)
+end
+
 function ArmorModule:GetDefaultOptions()
   return 'armor', {
       enabled = true,
-      durabilityMin = 20,
-      durabilityMax = 75,
-      alwaysShowIlvl = true
+      warningDurability = 20,
+      showIlvl = true,
+      showCoords = false
     }
 end
 
@@ -214,32 +272,29 @@ function ArmorModule:GetConfig()
           end
         end
       },
-      ilvlAlways = {
-        name = L['Always Show Item Level'],
-        order = 1,
-        type = "toggle",
-        get = function() return xb.db.profile.modules.armor.alwaysShowIlvl; end,
-        set = function(_, val) xb.db.profile.modules.armor.alwaysShowIlvl = val; self:Refresh(); end
-      },
       duraMin = {
-        name = L['Minimum Durability to Become Active'],
+        name = L['Durability Warning Threshold'],
         type = 'range',
-        order = 2,
+        order = 1,
         min = 0,
         max = 100,
         step = 5,
-        get = function() return xb.db.profile.modules.armor.durabilityMin; end,
-        set = function(info, val) xb.db.profile.modules.armor.durabilityMin = val; self:Refresh(); end
+        get = function() return xb.db.profile.modules.armor.warningDurability; end,
+        set = function(info, val) xb.db.profile.modules.armor.warningDurability = val; self:Refresh(); end
       },
-      duraMax = {
-        name = L['Maximum Durability to Show Item Level'],
-        type = 'range',
+      ilvlShow = {
+        name = L['Show Item Level'],
+        order = 2,
+        type = "toggle",
+        get = function() return xb.db.profile.modules.armor.showIlvl; end,
+        set = function(_, val) xb.db.profile.modules.armor.showIlvl = val; self:Refresh(); end
+      },
+      coordShow = {
+        name = L['Show Coordinates'],
         order = 3,
-        min = 0,
-        max = 100,
-        step = 5,
-        get = function() return xb.db.profile.modules.armor.durabilityMax; end,
-        set = function(info, val) xb.db.profile.modules.armor.durabilityMax = val; self:Refresh(); end
+        type = "toggle",
+        get = function() return xb.db.profile.modules.armor.showCoords; end,
+        set = function(_, val) xb.db.profile.modules.armor.showCoords = val; self:Refresh(); end
       }
     }
   }

@@ -56,13 +56,16 @@ function MenuModule:OnInitialize()
       text = 'Destiny 2'
     },
     VIPR = {
-      text = 'Call of Duty'
+      text = 'Call of Duty: BO4'
     },
     ODIN = {
-      text = 'Call of Duty MW'
+      text = 'Call of Duty: MW'
     },
     LAZR = {
-      text = 'Call of Duty MW2'
+      text = 'Call of Duty: MW2'
+    },
+    ZEUS = {
+      text = 'Call of Duty: BOCW'
     },
     W3 = {
       text = 'Warcraft 3 Reforged'
@@ -183,157 +186,157 @@ end
 
 function MenuModule:CreateFrames()
   parentFrame = xb:GetFrame('microMenuFrame')
+  local mm = xb.db.profile.modules.microMenu
 
-  if xb.db.profile.modules.microMenu.menu then
+  if mm.menu then
     self.frames.menu = CreateFrame("BUTTON", "menu", parentFrame)
     parentFrame = self.frames.menu
   else
-	if self.frames.menu then
-		self.frames.menu = nil
-	end
+    if self.frames.menu then
+      self.frames.menu = nil
+    end
   end
 
-  if xb.db.profile.modules.microMenu.chat then
+  if mm.chat then
     self.frames.chat = CreateFrame("BUTTON", "chat", parentFrame)
     parentFrame = self.frames.chat
   else
-	if self.frames.chat then
-		self.frames.chat = nil
-	end
+    if self.frames.chat then
+      self.frames.chat = nil
+    end
   end
 
-  if xb.db.profile.modules.microMenu.guild then
+  if mm.guild then
     self.frames.guild = CreateFrame("BUTTON", "guild", parentFrame)
     parentFrame = self.frames.guild
-	self.text.guild = self.frames.guild:CreateFontString(nil, 'OVERLAY')
+	  self.text.guild = self.frames.guild:CreateFontString(nil, 'OVERLAY')
     self.bgTexture.guild = self.frames.guild:CreateTexture(nil, "OVERLAY")
   else
-	if self.frames.guild then
-		self.frames.guild = nil
-		self.text.guild = nil
-		self.bgTexture.guild = nil
-	end
+    if self.frames.guild then
+      self.frames.guild = nil
+      self.text.guild = nil
+      self.bgTexture.guild = nil
+    end
   end
 
-  if xb.db.profile.modules.microMenu.social then
+  if mm.social then
     self.frames.social = CreateFrame("BUTTON", "social", parentFrame)
     parentFrame = self.frames.social
-	self.text.social = self.frames.social:CreateFontString(nil, 'OVERLAY')
+	  self.text.social = self.frames.social:CreateFontString(nil, 'OVERLAY')
     self.bgTexture.social = self.frames.social:CreateTexture(nil, "OVERLAY")
   else
-	if self.frames.social then
-		self.frames.social = nil
-		self.text.social = nil
-		self.bgTexture.social = nil
-	end
+    if self.frames.social then
+      self.frames.social = nil
+      self.text.social = nil
+      self.bgTexture.social = nil
+    end
   end
 
-  if xb.db.profile.modules.microMenu.char then
+  if mm.char then
     self.frames.char = CreateFrame("BUTTON", "char", parentFrame)
     parentFrame = self.frames.char
   else
-	if self.frames.char then
-		self.frames.char = nil
-	end
+    if self.frames.char then
+      self.frames.char = nil
+    end
   end
 
-  if xb.db.profile.modules.microMenu.spell then
+  if mm.spell then
     self.frames.spell = CreateFrame("BUTTON", "spell", parentFrame)
     parentFrame = self.frames.spell
   else
-	if self.frames.spell then
-		self.frames.spell = nil
-	end
+    if self.frames.spell then
+      self.frames.spell = nil
+    end
   end
 
-  if xb.db.profile.modules.microMenu.talent then
+  if mm.talent then
     self.frames.talent = CreateFrame("BUTTON", "talent", parentFrame)
     parentFrame = self.frames.talent
   else
-	if self.frames.talent then
-		self.frames.talent = nil
-	end
+    if self.frames.talent then
+      self.frames.talent = nil
+    end
   end
 
-  if xb.db.profile.modules.microMenu.ach then
+  if mm.ach then
     self.frames.ach = CreateFrame("BUTTON", "ach", parentFrame)
     parentFrame = self.frames.ach
   else
-	if self.frames.ach then
-		self.frames.ach = nil
-	end
+    if self.frames.ach then
+      self.frames.ach = nil
+    end
   end
 
-  if xb.db.profile.modules.microMenu.quest then
+  if mm.quest then
     self.frames.quest = CreateFrame("BUTTON", "quest", parentFrame)
     parentFrame = self.frames.quest
   else
-	if self.frames.quest then
-		self.frames.quest = nil
-	end
+    if self.frames.quest then
+      self.frames.quest = nil
+    end
   end
 
-  if xb.db.profile.modules.microMenu.lfg then
+  if mm.lfg then
     self.frames.lfg = CreateFrame("BUTTON", "lfg", parentFrame)
     parentFrame = self.frames.lfg
   else
-	if self.frames.lfg then
-		self.frames.lfg = nil
-	end
+    if self.frames.lfg then
+      self.frames.lfg = nil
+    end
   end
 
-  if xb.db.profile.modules.microMenu.journal then
+  if mm.journal then
     self.frames.journal = CreateFrame("BUTTON", "journal", parentFrame)
     parentFrame = self.frames.journal
   else
-	if self.frames.journal then
-		self.frames.journal = nil
-	end
+    if self.frames.journal then
+      self.frames.journal = nil
+    end
   end
 
-  if xb.db.profile.modules.microMenu.pvp then
+  if mm.pvp then
     self.frames.pvp = CreateFrame("BUTTON", "pvp", parentFrame)
     parentFrame = self.frames.pvp
   else
-	if self.frames.pvp then
-		self.frames.pvp = nil
-	end
+    if self.frames.pvp then
+      self.frames.pvp = nil
+    end
   end
 
-  if xb.db.profile.modules.microMenu.pet then
+  if mm.pet then
     self.frames.pet = CreateFrame("BUTTON", "pet", parentFrame)
     parentFrame = self.frames.pet
   else
-	if self.frames.pet then
-		self.frames.pet = nil
-	end
+    if self.frames.pet then
+      self.frames.pet = nil
+    end
   end
 
-  if xb.db.profile.modules.microMenu.shop then
+  if mm.shop then
     self.frames.shop = CreateFrame("BUTTON", "shop", parentFrame)
     parentFrame = self.frames.shop
   else
-	if self.frames.shop then
-		self.frames.shop = nil
-	end
+	  if self.frames.shop then
+		  self.frames.shop = nil
+	  end
   end
 
-  if xb.db.profile.modules.microMenu.help then
+  if mm.help then
     self.frames.help = CreateFrame("BUTTON", "help", parentFrame)
     parentFrame = self.frames.help
   else
-	if self.frames.help then
-		self.frames.help = nil
-	end
+	  if self.frames.help then
+		  self.frames.help = nil
+	  end
   end
-
 end
 
 function MenuModule:CreateIcons()
   for name, frame in pairs(self.frames) do
     if frame['Click'] ~= nil then --Odd way of checking if it's a button
         self.icons[name] = frame:CreateTexture(nil, "OVERLAY")
-        self.icons[name]:SetTexture(self.mediaFolder..name)
+        self.icons[name]:SetTexture(self.mediaFolder .. name)
     end
   end
 end
@@ -350,7 +353,7 @@ function MenuModule:IconDefaults(name)
   if self.icons[name] == nil then return; end
   self.icons[name]:SetPoint('CENTER')
   self.icons[name]:SetSize(self.iconSize, self.iconSize)
-  self.icons[name]:SetVertexColor(colors.normal.r, colors.normal.g, colors.normal.b, colors.normal.a)
+  self.icons[name]:SetVertexColor(xb:GetColor('normal'))
 end
 
 function MenuModule:RegisterFrameEvents()
@@ -363,6 +366,7 @@ function MenuModule:RegisterFrameEvents()
         frame:SetScript('OnClick', self.functions[name])
       end
     end
+
     if name == 'guild' then
       local leaveFunc = self:DefaultLeave(name)
       frame:SetScript("OnEnter", self:GuildHover(self:DefaultHover(name)))
@@ -380,15 +384,8 @@ function MenuModule:RegisterFrameEvents()
     end
   end
 
-  self:RegisterEvent('GUILD_ROSTER_UPDATE', function()
-    self:UpdateGuildText()
-  end)
-  self:RegisterEvent('CHAT_MSG_GUILD', function()
-    self:UpdateGuildText()
-  end)
-  -- going to add these 2 when i sub again and join a guild. not touching anything in case things bug
-  --self:RegisterEvent('GUILD_ROSTER_UPDATE', 'UpdateGuildText')
-  --self:RegisterEvent('CHAT_MSG_GUILD', 'UpdateGuildText')
+  self:RegisterEvent('GUILD_ROSTER_UPDATE', 'UpdateGuildText')
+  self:RegisterEvent('CHAT_MSG_GUILD', 'UpdateGuildText')
   self:RegisterEvent('BN_FRIEND_ACCOUNT_ONLINE', 'UpdateFriendText')
   self:RegisterEvent('BN_FRIEND_ACCOUNT_OFFLINE', 'UpdateFriendText')
   self:RegisterEvent('FRIENDLIST_UPDATE', 'UpdateFriendText')
@@ -396,6 +393,7 @@ end
 
 function MenuModule:UnregisterFrameEvents()
   self:UnregisterEvent('GUILD_ROSTER_UPDATE')
+  self:UnregisterEvent('CHAT_MSG_GUILD')
   self:UnregisterEvent('BN_FRIEND_ACCOUNT_ONLINE')
   self:UnregisterEvent('BN_FRIEND_ACCOUNT_OFFLINE')
   self:UnregisterEvent('FRIENDLIST_UPDATE')
@@ -469,8 +467,8 @@ function MenuModule:DefaultHover(name)
     if (not xb.db.profile.modules.microMenu.combatEn) and InCombatLockdown() then return; end
     if self.icons[name] ~= nil then
       self.icons[name]:SetVertexColor(unpack(xb:HoverColors()))
-	  self.tipHover=(name=="social")
-	  self.gtipHover=(name=="guild")
+	    self.tipHover = (name == 'social')
+	    self.gtipHover = (name == 'guild')
     end
   end
 end
@@ -479,7 +477,7 @@ function MenuModule:DefaultLeave(name)
   return function()
     if (not xb.db.profile.modules.microMenu.combatEn) and InCombatLockdown() then return; end
     if self.icons[name] ~= nil then
-      self.icons[name]:SetVertexColor(xb.db.profile.color.normal.r, xb.db.profile.color.normal.g, xb.db.profile.color.normal.b, xb.db.profile.color.normal.a)
+      self.icons[name]:SetVertexColor(xb:GetColor('normal'))
     end
   end
 end
@@ -503,9 +501,9 @@ function MenuModule:SocialHover(hoverFunc)
     -- declare our LTip tooltip with 2 columns and mouse interaction when hovering/leaving/updating the tooltip
     local tooltip = self.LTip:Acquire("SocialToolTip", 2, "LEFT", "RIGHT")
 	  tooltip:EnableMouse(true)
-	  tooltip:SetScript("OnEnter",function() self.tipHover = true end)
-	  tooltip:SetScript("OnLeave",function() self.tipHover = false end)
-    tooltip:SetScript("OnUpdate",function() if not self.tipHover and not self.lineHover then tooltip:Release() end end)
+	  tooltip:SetScript("OnEnter", function() self.tipHover = true end)
+	  tooltip:SetScript("OnLeave", function() self.tipHover = false end)
+    tooltip:SetScript("OnUpdate", function() if not self.tipHover and not self.lineHover then tooltip:Release() end end)
     MenuModule:SkinFrame(tooltip, "SocialToolTip")
 
     -- get the amount of bnet and non-bnet online friends as well as the player's faction
@@ -563,14 +561,15 @@ function MenuModule:SocialHover(hoverFunc)
           if gameClient == BNET_CLIENT_WOW then
             isWoW = true
             -- checks if the friend is logged into classic or retail
-            if richPresence:find("Classic") then
+            if richPresence:find(L['Classic']) then
               isClassic = true 
             -- friend is playing retail WoW and is of the same faction as the player
             elseif faction == playerFaction then
-              charNameFormat = "(|cffecd672" .. charName .. "-" .. realmName .. "|r)"
-            else
+              if realmName then charNameFormat = "(|cffecd672" .. (charName or L['No Info']) .. "-" .. realmName .. "|r)" end
             -- friend is playing retail WoW but is playing on the player's opposite faction
-              charNameFormat = "(|cffecd672" .. faction .. " - " .. charName .. "|r)"
+            else
+              local factionColors = { ['Alliance'] = "ff008ee8", ['Horde'] = "ffc80000" }
+              charNameFormat = "(|c" .. factionColors[faction] .. L[faction] .. "|r - |cffecd672" .. (charName or L['No Info']) .. "|r)"
             end
           end
 
@@ -586,7 +585,8 @@ function MenuModule:SocialHover(hoverFunc)
             BNET_CLIENT_DESTINY2, 
             BNET_CLIENT_COD, 
             BNET_CLIENT_COD_MW, 
-            BNET_CLIENT_COD_MW2, 
+            BNET_CLIENT_COD_MW2,
+            BNET_CLIENT_COD_BOCW,
             BNET_CLIENT_WC3 
           }
 
@@ -664,9 +664,9 @@ function MenuModule:SocialHover(hoverFunc)
           -- add left and right line to the tooltip
           tooltip:AddLine(lineLeft, lineRight)
           -- set up mouse events when the player hovers over/clicks on/leaves the friend's line in the tooltip
-		      tooltip:SetLineScript(tooltip:GetLineCount(),"OnEnter",function() self.lineHover = true end)
-		      tooltip:SetLineScript(tooltip:GetLineCount(),"OnLeave",function() self.lineHover = false end)
-          tooltip:SetLineScript(tooltip:GetLineCount(),"OnMouseUp",function(self,_,button)
+		      tooltip:SetLineScript(tooltip:GetLineCount(),"OnEnter", function() self.lineHover = true end)
+		      tooltip:SetLineScript(tooltip:GetLineCount(),"OnLeave", function() self.lineHover = false end)
+          tooltip:SetLineScript(tooltip:GetLineCount(),"OnMouseUp", function(self, _, button)
             -- if there is no realm name in the friend's name, the friend is playing on the same realm as the player
 		        if not name:find('%u%U*-%u%U') then
 				      local homeRealm = GetRealmName()
@@ -702,74 +702,87 @@ end
 
 function MenuModule:GuildHover(hoverFunc)
   return function()
+    -- get out if player is not in a guild
     if not IsInGuild() then
       hoverFunc()
       return
     end
+    -- get out if tooltips are disabled
     if not xb.db.profile.modules.microMenu.showTooltips then
       hoverFunc()
       return
     end
 
-	local modifierFunc = IsShiftKeyDown
-	if self.modifier == "ALT" then
-		modifierFunc = IsAltKeyDown
-	elseif self.modifier == "CONTROL" then
-		modifierFunc = IsControlKeyDown
-	end
+    -- determines whether SHIFT/ALT/CTRL has been pressed based on the user's designated modifier
+	  local modifierFunc = IsShiftKeyDown
+	  if self.modifier == "ALT" then modifierFunc = IsAltKeyDown
+	  elseif self.modifier == "CONTROL" then modifierFunc = IsControlKeyDown end
 
-	if self.LTip:IsAcquired("GuildToolTip") then
-		self.LTip:Release(self.LTip:Acquire("GuildToolTip"))
-	end
-	local tooltip = self.LTip:Acquire("GuildToolTip", 2, "LEFT","RIGHT")
-	tooltip:EnableMouse(true)
-	tooltip:SetScript("OnEnter",function() self.gtipHover=true end)
-	tooltip:SetScript("OnLeave",function() self.gtipHover=false end)
-  tooltip:SetScript("OnUpdate",function() if not self.gtipHover and not self.glineHover then tooltip:Release() end end)
-  MenuModule:SkinFrame(tooltip, "SocialToolTip")
+    -- if the guild tooltip already exists, deletus fetus it
+    if self.LTip:IsAcquired("GuildToolTip") then self.LTip:Release(self.LTip:Acquire("GuildToolTip")) end
+    
+    -- declare our LTip tooltip with 2 columns and mouse interaction when hovering/leaving/updating the tooltip
+    local tooltip = self.LTip:Acquire("GuildToolTip", 2, "LEFT", "RIGHT")
+	  tooltip:EnableMouse(true)
+	  tooltip:SetScript("OnEnter", function() self.gtipHover = true end)
+	  tooltip:SetScript("OnLeave", function() self.gtipHover = false end)
+    tooltip:SetScript("OnUpdate", function() if not self.gtipHover and not self.glineHover then tooltip:Release() end end)
+    MenuModule:SkinFrame(tooltip, "GuildToolTip")
 
-  C_GuildInfo.GuildRoster() --requests an update to guild roster information from blizzbois
-  tooltip:SmartAnchorTo(MenuModule.frames.guild)
-	local gName, _, _, _ = GetGuildInfo('player')
-    tooltip:AddHeader("[|cff6699FF"..GUILD.."|r]",'|cff00ff00'..gName..'|r')
-    tooltip:AddLine(" "," ")
-	if xb.db.profile.modules.microMenu.showGMOTD then
-		if GetGuildRosterMOTD() ~= "" then
-			tooltip:AddLine('|cff00ff00'..GetGuildRosterMOTD()..'|r', ' ') --should be cut down
-		end
-	end
+    C_GuildInfo.GuildRoster() --requests an update to guild roster information from blizzbois
+    tooltip:SmartAnchorTo(MenuModule.frames.guild)
+
+    -- ties the 'Guild' and '<Left-Click>' etc. in the tooltip to the addon's hovercolors
+    local r, g, b = unpack(xb:HoverColors())
+
+    -- get guild info and create first tooltip line, left is [Guild], right is GuildName
+    local gName = GetGuildInfo('player')
+    tooltip:AddHeader('|cFFFFFFFF[|r' .. GUILD .. '|cFFFFFFFF]|r', '|cff00ff00' .. gName .. '|r')
+    tooltip:SetCellTextColor(1, 1, r, g, b, 1)
+    tooltip:SetCellTextColor(1, 2, r, g, b, 1)
+    tooltip:AddLine(' ',' ')
+
+    if xb.db.profile.modules.microMenu.showGMOTD then
+      local motd = GetGuildRosterMOTD()
+      if motd ~= '' then
+        tooltip:AddLine('|cff00ff00' .. motd .. '|r', ' ') --REVISION LATER: shorten guild motd if too long
+      end
+    end
 
     local totalGuild, _ = GetNumGuildMembers()
     for i = 0, totalGuild do
       local name, _, _, level, _, zone, note, _, isOnline, status, class, _, _, isMobile, _ = GetGuildRosterInfo(i)
       if isOnline then
         local colorHex = RAID_CLASS_COLORS[class].colorStr
-        if status == 1 then
-          status = DEFAULT_AFK_MESSAGE;
-        elseif status == 2 then
-          status = DEFAULT_DND_MESSAGE;
-        else
-          status = ''
-        end
-        local lineLeft = string.format('%s |c%s%s|r %s %s', level, colorHex, name, status, note)
-        local lineRight = string.format('%s|cffffffff %s', (isMobile and "|cffffffa0[M]|r " or ""), zone or '')
+
+        -- determine afk/dnd/online status of guild members
+        if status == 1 then status = DEFAULT_AFK_MESSAGE;
+        elseif status == 2 then status = DEFAULT_DND_MESSAGE;
+        else status = '' end
+
+        -- name given by Blizzard is CharName-RealmName, truncate to CharName
+        local charName = name:match('[^-]+')
+
+        if note ~= '' then note = '|cffffffff(|r' .. note .. '|cffffffff)|r' end
+        local lineLeft = string.format('%s |c%s%s|r %s |cffecd672%s|r', level, colorHex, charName or name or L['No Info'], status, note)
+        local lineRight = string.format('%s|cffffffff %s', (isMobile and '|cffffffa0[M]|r ' or ''), zone or '')
         tooltip:AddLine(lineLeft, lineRight)
-		    tooltip:SetLineScript(tooltip:GetLineCount(),"OnEnter",function() self.glineHover = true;end)
-		    tooltip:SetLineScript(tooltip:GetLineCount(),"OnLeave",function() self.glineHover = false; end)
-		    tooltip:SetLineScript(tooltip:GetLineCount(),"OnMouseUp",function(self,_,button)
-		    if button == "LeftButton" then
-				if modifierFunc() then
-					InviteUnit(name)
-				else
-					ChatFrame_OpenChat(SLASH_SMART_WHISPER1.." "..name.." ")
-				end
-			end
-		  end)
+		    tooltip:SetLineScript(tooltip:GetLineCount(),'OnEnter', function() self.glineHover = true end)
+		    tooltip:SetLineScript(tooltip:GetLineCount(),'OnLeave', function() self.glineHover = false end)
+		    tooltip:SetLineScript(tooltip:GetLineCount(),'OnMouseUp', function(self, _, button)
+		      if button == 'LeftButton' then
+				    if modifierFunc() then C_PartyInfo.InviteUnit(name)
+            else ChatFrame_OpenChat(SLASH_SMART_WHISPER1 .. ' ' .. name .. ' ') end
+			    end
+		    end)
       end
     end
+    -- add section under member list for (modifiers) + left/right click and what each section does
     tooltip:AddLine(' ',' ')
-    tooltip:AddLine('|cffffff00<'..L['Left-Click']..'>|r', '|cffffffff'..L['Whisper Character']..'|r')
-    tooltip:AddLine('|cffffff00<'..self.modifier..'+'..L['Left-Click']..'>|r', '|cffffffff'..CALENDAR_INVITELIST_INVITETORAID..'|r')
+    tooltip:AddLine('<' .. L['Left-Click'] .. '>', L['Whisper Character'])
+    tooltip:SetCellTextColor(tooltip:GetLineCount(), 1, r, g, b, 1)
+    tooltip:AddLine('<' .. self.modifier .. '+' .. L['Left-Click'] .. '>', CALENDAR_INVITELIST_INVITETORAID)
+    tooltip:SetCellTextColor(tooltip:GetLineCount(), 1, r, g, b, 1)
     tooltip:Show()
     hoverFunc()
   end
